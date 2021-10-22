@@ -18,12 +18,16 @@
     gap: 40px;
     flex: 1;
 
+    animation: MessageFadeinAnimation 500ms ease;
+
     .message{
 
       max-width: 440px;
 
       &:nth-child(2){
         margin-left: 80px;
+        animation: MessageFadeinReverseAnimation 500ms ease;
+
       }
       .messageContent {
         font-size: 20px;
@@ -60,5 +64,31 @@
         }
       }
     }
+  }
+}
+
+.messageFadeIn {
+  animation: MessageFadeinAnimation 500ms ease;
+}
+
+@keyframes MessageFadeinAnimation {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+@keyframes MessageFadeinReverseAnimation {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
   }
 }

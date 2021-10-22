@@ -30,6 +30,7 @@ socket.on('new_message', (newMessage: IMessages) => {
 export function MessageList (){
   
   const [messages, setMesssages] = useState<IMessages[]>([])
+  const [fadeInAnimation, setFadeInAnimation] = useState(false)
 
   const getLastThreeMessages = async () => {
     try {
@@ -42,9 +43,7 @@ export function MessageList (){
 
   useEffect(() => {
     getLastThreeMessages()
-  }, [])
-
-  useEffect(() => {
+    
     const timer = setInterval(() => {
       if(messageQueue.length > 0){
         setMesssages(prevState => [
@@ -52,12 +51,22 @@ export function MessageList (){
           prevState[0],
           prevState[1]
         ].filter(Boolean))
-
         messageQueue.shift()
       }
     }, 3000)
-
   }, [])
+
+  useEffect(() => {
+    setFadeInAnimation(true)
+  }, [messages])
+
+  useEffect(() => {
+    if(fadeInAnimation) {
+      setTimeout(() => {
+        setFadeInAnimation(false)
+      }, 300)
+    }
+  }, [fadeInAnimation])
 
   return (
     <div className={styles.messageListWrapper}>
@@ -66,7 +75,7 @@ export function MessageList (){
         {
           messages.map( (item, index) => {
             return (
-              <li className={styles.message} key={index}>
+              <li className={`${styles.message} ${(fadeInAnimation && index === 0) ? styles.messageFadeIn : '' }`} key={index}>
                 <p>{item.text}</p>
                 <div className={styles.messageUser}>
                   <div className={styles.userImage}>

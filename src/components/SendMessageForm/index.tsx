@@ -8,20 +8,23 @@ export function SendMessageForm (){
 
   const [message, setMessage] = useState('')
   const [canSendMessage, setCanSendMessage] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const { user, signOut } = useContext(AuthContext)
 
   async function handleSubmitForm(event: FormEvent){
     event.preventDefault()
     if(!canSendMessage) return
+    setIsLoading(true)
 
     if (!message.trim()) return
     try {
       await api.post('/messages', { message })
       setMessage('')
       setCanSendMessage(false)
+      setIsLoading(false)
     } catch (error) {
-      
+      setIsLoading(false)
     }
   }
 
@@ -59,10 +62,17 @@ export function SendMessageForm (){
           placeholder="Qual a usa expectativa para o evento?"
         />
 
-        <button type="submit" className={`${canSendMessage ? '' : styles.buttonSubmitReloading}`}>
-          <span>
-            Enviar mensagem
-          </span>
+        <button type="submit" disabled={isLoading} className={`${canSendMessage ? '' : styles.buttonSubmitReloading}`}>
+          {
+            isLoading ? 
+            <span>
+              Enviando mensagem...
+            </span>
+            :
+            <span>
+              Enviar mensagem
+            </span>
+          }
         </button>
       </form>
     </div>
